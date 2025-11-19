@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 const CustomerDashboard = () => {
   const { currentUser, logout } = useAuth();
-  const { medicines, addToCart, cart } = usePharmacy();
+  const { medicines, addToCart, cart, resetDoctorBot } = usePharmacy();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -22,6 +22,7 @@ const CustomerDashboard = () => {
   const [showCart, setShowCart] = useState(false);
 
   const handleLogout = () => {
+    resetDoctorBot();
     logout();
     navigate('/');
   };

@@ -12,13 +12,14 @@ import MedicineForm from './MedicineForm';
 
 const AdminDashboard = () => {
   const { currentUser, logout } = useAuth();
-  const { medicines, deleteMedicine } = usePharmacy();
+  const { medicines, deleteMedicine, resetDoctorBot } = usePharmacy();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [editingMedicine, setEditingMedicine] = useState<string | null>(null);
 
   const handleLogout = () => {
+    resetDoctorBot();
     logout();
     navigate('/');
   };
