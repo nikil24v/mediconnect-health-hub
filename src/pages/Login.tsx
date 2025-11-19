@@ -80,12 +80,6 @@ const Login = () => {
           <Button type="submit" className="w-full">
             Sign In
           </Button>
-
-          <div className="text-sm text-center text-muted-foreground pt-4 border-t">
-            <p className="mb-2">Demo Credentials:</p>
-            <p>Admin: admin / admin123</p>
-            <p>Customer: customer / customer123</p>
-          </div>
         </form>
       </Card>
     </div>
