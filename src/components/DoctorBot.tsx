@@ -19,20 +19,30 @@ const DoctorBot = ({ open, onClose }: DoctorBotProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<Medicine[]>([]);
 
-  const handleSearch = () => {
-    const query = searchQuery.toLowerCase().trim();
-    if (!query) {
+  const commonSymptoms = [
+    'Fever', 'Headache', 'Cold', 'Cough', 'Body Pain',
+    'Acidity', 'Sore Throat', 'Allergy', 'Infection', 'Stomach Pain'
+  ];
+
+  const handleSearch = (query?: string) => {
+    const searchTerm = (query || searchQuery).toLowerCase().trim();
+    if (!searchTerm) {
       setSuggestions([]);
       return;
     }
 
     const filtered = medicines.filter(medicine =>
-      medicine.name.toLowerCase().includes(query) ||
-      medicine.category.toLowerCase().includes(query) ||
-      medicine.symptoms.some(symptom => symptom.toLowerCase().includes(query))
+      medicine.name.toLowerCase().includes(searchTerm) ||
+      medicine.category.toLowerCase().includes(searchTerm) ||
+      medicine.symptoms.some(symptom => symptom.toLowerCase().includes(searchTerm))
     );
 
     setSuggestions(filtered);
+  };
+
+  const handleSymptomClick = (symptom: string) => {
+    setSearchQuery(symptom);
+    handleSearch(symptom);
   };
 
   const handleSkip = () => {
@@ -55,17 +65,36 @@ const DoctorBot = ({ open, onClose }: DoctorBotProps) => {
         </DialogHeader>
 
         <div className="space-y-4 mt-4">
-          <div className="flex gap-2">
-            <Input
-              placeholder="e.g., fever, headache, Paracetamol, Pain Relief..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-            />
-            <Button onClick={handleSearch} className="shrink-0">
-              <Search className="w-4 h-4 mr-2" />
-              Search
-            </Button>
+          <div className="space-y-3">
+            <div className="flex gap-2">
+              <Input
+                placeholder="Or type your symptom here..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              />
+              <Button onClick={() => handleSearch()} className="shrink-0">
+                <Search className="w-4 h-4 mr-2" />
+                Search
+              </Button>
+            </div>
+            
+            <div>
+              <p className="text-sm text-muted-foreground mb-2">Select common symptoms:</p>
+              <div className="flex flex-wrap gap-2">
+                {commonSymptoms.map((symptom) => (
+                  <Button
+                    key={symptom}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleSymptomClick(symptom)}
+                    className="text-xs"
+                  >
+                    {symptom}
+                  </Button>
+                ))}
+              </div>
+            </div>
           </div>
 
           {suggestions.length > 0 && (
